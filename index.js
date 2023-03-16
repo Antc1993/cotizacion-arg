@@ -16,8 +16,20 @@ const content = 'Some content!';
 
 
 
-(async function scrape() {
-    const browser = await puppeteer.launch({ headless: false });
+const datos = async function scrape() {
+    const browser = await puppeteer.launch({ 
+      headless: false,
+      args: [
+        "--disable-setuid-sandbox",
+        "--no-sandbox",
+        "--single-process",
+        "--no-zygote",
+      ],
+      executablePath:
+        process.env.NODE_ENV === "production"
+          ? process.env.PUPPETEER_EXECUTABLE_PATH
+          : puppeteer.executablePath()
+        });
 
     const page = await browser.newPage();
     await page.goto('https://www.rava.com/perfil/DOLAR%20MEP');
@@ -44,16 +56,20 @@ const content = 'Some content!';
 
     await browser.close();
 
-})();
+};
 
 app.get('/', (req, res) => {    
+
+    
+
     res.json(
         {
-            "Title": "Hola mundo"
+            "Title": datos
         }
     );
 })
 
 app.listen(app.get('port'),()=>{
     console.log(`Server listening on port ${app.get('port')}`);
+    datos()
 });
