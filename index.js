@@ -44,6 +44,8 @@ async function scrape() {
     await page.waitForSelector('table');
     
     const data = await page.evaluate(() => {
+        const tabla = document.getElementsByTagName("table")
+        
         const trs = document.querySelectorAll('table tr')
 
         var diaCotizacion = []
@@ -61,20 +63,21 @@ async function scrape() {
             }
        });
 
-        return diaCotizacion
+        //return diaCotizacion
+        return tabla[0].innerHTML
       });
 
-    const json = JSON.stringify(data);
 
-     await fs.writeFileSync('data.txt', json, err => {
+      
+    //const json = JSON.stringify(data);
+
+     await fs.writeFileSync('data.txt', data, err => {
         if (err) {
           console.error(err);
         }
       
       });
     
-   
-    console.log(json);
 
     await browser.close();
 
@@ -84,7 +87,9 @@ app.get('/',  async  (req, res) => {
 
     try {
       const data = fs.readFileSync('data.txt', 'utf8');
-      res.json(data);
+
+      res.send("<table>" + data + "</table>")
+      //res.json(data);
     } catch (err) {
     
       res.json(err);
