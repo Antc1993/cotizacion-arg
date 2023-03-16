@@ -34,6 +34,7 @@ const datos = async function scrape() {
         });
 
     const page = await browser.newPage();
+    await page.setDefaultNavigationTimeout(0);
     await page.goto('https://www.rava.com/perfil/DOLAR%20MEP');
 
     await page.waitForSelector('table');
@@ -66,7 +67,7 @@ app.get('/', (req, res) => {
 
     res.json(
         {
-            "Title": datos
+            "Title": "hola"
         }
     );
 })
