@@ -76,7 +76,7 @@ async function scrape() {
       
     //const json = JSON.stringify(data);
 
-     await fs.writeFileSync('data.txt', data, err => {
+     await fs.writeFileSync('db/data.txt', data, err => {
         if (err) {
           console.error(err);
         }
@@ -91,7 +91,7 @@ async function scrape() {
 app.get('/',  async  (req, res) => {    
 
     try {
-      const data = fs.readFileSync('data.txt', 'utf8');
+      const data = fs.readFileSync('db/data.txt', 'utf8');
 
       res.send(data)
       //res.json(data);
