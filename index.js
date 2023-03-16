@@ -25,6 +25,7 @@ const datos = async function scrape() {
         "--no-sandbox",
         "--single-process",
         "--no-zygote",
+        `--disable-gpu`,
       ],
       executablePath:
         process.env.NODE_ENV === "production"
