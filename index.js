@@ -19,7 +19,7 @@ const content = 'Some content!';
 
 const datos = async function scrape() {
     const browser = await puppeteer.launch({ 
-      headless: false,
+      headless: true,
       args: [
         "--disable-setuid-sandbox",
         "--no-sandbox",
