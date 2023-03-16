@@ -44,27 +44,32 @@ async function scrape() {
     await page.waitForSelector('table');
     
     const data = await page.evaluate(() => {
-        const tabla = document.getElementsByTagName("table")
+        let tabla = "<table>"
         
         const trs = document.querySelectorAll('table tr')
 
         var diaCotizacion = []
         var arrayTd = []
         trs.forEach(element => {
+            tabla = tabla + "<tr>"
             tds = element.querySelectorAll("td")
             if(tds.length>0){
                 arrayTd = []
                 tds.forEach(element2 => {
                     if(element2.innerText != "-"){
                         arrayTd.push(element2.innerText);
+                        tabla = tabla + "<td>" + element2.innerText + "</td>"
                     }
                 });
                 diaCotizacion.push(arrayTd)     
             }
-       });
+            tabla = tabla + "</tr>"
+        });
+
+        tabla = tabla + "</tabla>"
 
         //return diaCotizacion
-        return tabla[0].innerHTML
+        return tabla;
       });
 
 
@@ -88,7 +93,7 @@ app.get('/',  async  (req, res) => {
     try {
       const data = fs.readFileSync('data.txt', 'utf8');
 
-      res.send("<table>" + data + "</table>")
+      res.send(data)
       //res.json(data);
     } catch (err) {
     
