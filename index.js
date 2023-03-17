@@ -12,12 +12,7 @@ app.use(express.urlencoded({extended:false}));
 app.use(express.json());
  
 
-
-const content = 'Some content!';
-
-
-
-async function scrape() {
+const prueba = async () => {
     const browser = await puppeteer.launch({ 
       headless: true,
       args: [
@@ -76,33 +71,29 @@ async function scrape() {
       
     //const json = JSON.stringify(data);
 
-     await fs.writeFileSync('db/data.txt', data, err => {
+     /*await fs.writeFileSync('db/data.txt', data, err => {
         if (err) {
           console.error(err);
         }
       
       });
-    
+    */
 
     await browser.close();
+
+    return data
 
 };
 
 app.get('/',  async  (req, res) => {    
 
-    try {
-      const data = fs.readFileSync('db/data.txt', 'utf8');
-
-      res.send(data)
-      //res.json(data);
-    } catch (err) {
-    
-      res.json(err);
-    }
+  (async () => {
+    res.send(await prueba())
+  })()
    
 })
 
 app.listen(app.get('port'),()=>{
     console.log(`Server listening on port ${app.get('port')}`);
-    scrape()
+  
 });
