@@ -3,6 +3,8 @@ const fs = require('fs');
 const express = require('express');
 const app = express();
 const morgan=require('morgan');
+const Cotizacion=require("./config.js")
+
 require("dotenv").config();
 app.set('port', process.env.PORT || 3000);
 app.set('json spaces', 2)
@@ -10,7 +12,34 @@ app.set('json spaces', 2)
 app.use(morgan('dev'));
 app.use(express.urlencoded({extended:false}));
 app.use(express.json());
- 
+
+
+/*const docRef = db.collection('cotizaciones').doc('alovelace');
+docRef.set({
+  tabla: '<tabla>',
+});*/
+
+
+async function start() {
+  const cotizacionesDoc = await Cotizacion.get();
+
+  /*cotizacionesDoc.forEach(doc => {
+    console.log(doc.id, '=>', doc.data());
+  });*/
+
+  //console.log(await Cotizacion.doc("HLl1RvwH3ikCWqfWXAM6").get())
+  //const pruebaAgregar = await Cotizacion.doc("1").set({id: "3", tabla: "otra"})
+  /*Cotizacion.doc("LA").set({
+    name: "Los Angeles",
+    state: "CA",
+    country: "USA"
+})*/
+
+  
+
+}
+
+
 
 const prueba = async () => {
     const browser = await puppeteer.launch({ 
@@ -63,14 +92,15 @@ const prueba = async () => {
 
         tabla = tabla + "</tabla>"
 
+        const json = JSON.stringify(diaCotizacion);
+       
         //return diaCotizacion
         return tabla;
       });
 
 
       
-    //const json = JSON.stringify(data);
-
+    
      /*await fs.writeFileSync('db/data.txt', data, err => {
         if (err) {
           console.error(err);
@@ -79,6 +109,10 @@ const prueba = async () => {
       });
     */
 
+      Cotizacion.doc("1").update({
+        tabla: data
+      });
+
     await browser.close();
 
     return data
@@ -86,9 +120,12 @@ const prueba = async () => {
 };
 
 app.get('/',  async  (req, res) => {    
-
+ 
   (async () => {
-    res.send(await prueba())
+    const tablaDB = await Cotizacion.doc("1").get()
+    res.send(tablaDB.data()["tabla"])
+    await prueba()
+   
   })()
    
 })
